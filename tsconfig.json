@@ -3,7 +3,8 @@
     "types": [
       "@types/react",
       "@types/react-dom",
-      "@types/bun"
+      "@types/bun",
+      "react-hook-form"
     ],
     "target": "es2017",
     "lib": [

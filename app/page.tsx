@@ -1,26 +1,61 @@
 // app/page.tsx
-import { unstable_cache } from 'next/cache'
-import * as schema from "@/db/schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { moviesSchema } from "@/db/schema";
 import { db } from "@/db/db";
+import { movies } from "@/db/schema";
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
+import { z } from "zod";
 
-const getMovies = unstable_cache(
-  async () => {
-    return await db.select().from(schema.movies)
-  },
-  ['movies'],
-  { revalidate: 3600, tags: ['movies'] }
-)
-export default async function Home() {
-  const movies = await getMovies();
+type MovieFormValues = z.infer<typeof moviesSchema>;
+
+export default function Home() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<MovieFormValues>({
+    resolver: zodResolver(moviesSchema),
+  });
+
+  const onSubmit = async (data: MovieFormValues) => {
+    try {
+      // 将表单数据插入数据库
+      await db.insert(movies).values(data).run();
+      console.log("Movie added successfully:", data);
+    } catch (error) {
+      console.error("Failed to add movie:", error);
+    }
+  };
 
   return (
-    <div className='h-screen m-10'>
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Home</h1>
-      <ul className="my-6 ml-6 list-disc [&>li]:mt-2">
-        {movies.map((movie) => (
-          <li key={movie.id}>{movie.title}</li>
-        ))}
-      </ul>
+    <div className="max-w-md mx-auto p-8">
+      <h1 className="text-2xl font-bold mb-6">Add a Movie</h1>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FormField>
+          <FormItem>
+            <FormLabel>Title</FormLabel>
+            <FormControl>
+              <Input {...register("title")} placeholder="Movie Title" />
+            </FormControl>
+            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+          </FormItem>
+        </FormField>
+
+        <FormField>
+          <FormItem>
+            <FormLabel>Release Year</FormLabel>
+            <FormControl>
+              <Input type="number" {...register("releaseYear")} placeholder="Release Year" />
+            </FormControl>
+            {errors.releaseYear && <p className="text-red-500">{errors.releaseYear.message}</p>}
+          </FormItem>
+        </FormField>
+
+        <Button type="submit">Submit</Button>
+      </Form>
     </div>
   );
 }
