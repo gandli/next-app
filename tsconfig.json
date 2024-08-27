@@ -1,11 +1,5 @@
 {
   "compilerOptions": {
-    "types": [
-      "@types/react",
-      "@types/react-dom",
-      "@types/bun",
-      "react-hook-form"
-    ],
     "target": "es2017",
     "lib": [
       "dom",
