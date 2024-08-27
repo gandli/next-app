@@ -124,7 +124,11 @@ export default nextConfig;
 ```json
 {
   "compilerOptions": {
-    "types": ["bun", "bun-types"],
+    "types": [
+      "@types/react",
+      "@types/react-dom",
+      "@types/bun"
+    ],
     "target": "es2017",
     ...
   },
