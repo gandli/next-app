@@ -15,3 +15,5 @@ export const moviesSchema = z.object({
     title: z.string().min(1, "name is required"), // 确保 title 是非空字符串
     releaseYear: z.number().min(1888, "Release year must be a valid year after 1888"), // releaseYear 必须是 1888 年之后的有效年份
 });
+
+export type MovieFormValues = z.infer<typeof moviesSchema>;
