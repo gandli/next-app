@@ -1,6 +1,6 @@
 # 如何使用 Next.js、Bun 和 Drizzle ORM 初始化项目
 
-本文将指导您如何从零开始设置一个使用 Next.js、Bun 和 Drizzle ORM 的项目，适用于现代的全栈开发场景。
+本文将指导您如何从零开始设置一个使用 Next.js、Bun 和 Drizzle-ORM 的项目，适用于现代的全栈开发场景。
 
 ## 1. 安装 Bun
 
