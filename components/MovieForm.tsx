@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { addMovie } from "@/app/actions/movieActions";
 import { useRouter } from "next/navigation";
 
-export function MovieForm() {
+const MovieForm = () => {
   const router = useRouter();
 
   const form = useForm<MovieFormValues>({
@@ -69,4 +69,6 @@ export function MovieForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default MovieForm;
