@@ -1,15 +1,17 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { moviesSchema, MovieFormValues } from "@/db/schema";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { addMovie } from "@/app/actions/movieActions";
+import { useRouter } from "next/navigation";
 
-interface MovieFormProps {
-  onSubmit: (data: MovieFormValues) => void;
-}
+export function MovieForm() {
+  const router = useRouter();
 
-export function MovieForm({ onSubmit }: MovieFormProps) {
   const form = useForm<MovieFormValues>({
     resolver: zodResolver(moviesSchema),
     defaultValues: {
@@ -17,6 +19,16 @@ export function MovieForm({ onSubmit }: MovieFormProps) {
       releaseYear: undefined,
     },
   });
+
+  const onSubmit = async (data: MovieFormValues) => {
+    const result = await addMovie(data);
+    if (result.success) {
+      console.log(result.message);
+      router.push("/success");
+    } else {
+      console.error(result.message);
+    }
+  };
 
   return (
     <Form {...form}>
