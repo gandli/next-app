@@ -1,21 +1,22 @@
 // db\seed.ts
 
 import { db } from "./db";
-import * as schema from "./schema";
+import { movies } from "./schema";
 
-await db.insert(schema.movies).values([
-  {
-    title: "The Matrix",
-    releaseYear: 1999,
-  },
-  {
-    title: "The Matrix Reloaded",
-    releaseYear: 2003,
-  },
-  {
-    title: "The Matrix Revolutions",
-    releaseYear: 2003,
-  },
-]);
+const seedData = [
+  { title: "The Matrix", releaseYear: 1999 },
+  { title: "The Matrix Reloaded", releaseYear: 2003 },
+  { title: "The Matrix Revolutions", releaseYear: 2003 },
+];
 
-console.log(`Seeding complete.`);
+async function seed() {
+  console.log("开始数据库种子填充...");
+  try {
+    await db.insert(movies).values(seedData);
+    console.log("数据库种子填充完成。");
+  } catch (error) {
+    console.error("数据库种子填充失败:", error);
+  }
+}
+
+seed();

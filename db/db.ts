@@ -3,5 +3,7 @@
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import { Database } from "bun:sqlite";
 
-const sqlite = new Database("./db/sqlite.db");
+const DB_PATH = "./db/sqlite.db";
+
+export const sqlite = new Database(DB_PATH);
 export const db = drizzle(sqlite);

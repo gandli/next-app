@@ -11,8 +11,14 @@ export async function POST(req: NextRequest) {
 
     await db.insert(movies).values(data).run();
 
-    return NextResponse.json({ message: "Movie added successfully" }, { status: 201 });
+    return NextResponse.json(
+      { message: "Movie added successfully" },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    return NextResponse.json({ error: "未知错误" }, { status: 500 });
   }
 }
