@@ -4,9 +4,17 @@ import { db } from "./db";
 import { movies } from "./schema";
 
 const seedData = [
-  { title: "The Matrix", releaseYear: 1999 },
-  { title: "The Matrix Reloaded", releaseYear: 2003 },
-  { title: "The Matrix Revolutions", releaseYear: 2003 },
+  { title: "The Matrix", releaseYear: 1999, poster: "/uploads/the-matrix.jpg" },
+  {
+    title: "The Matrix Reloaded",
+    releaseYear: 2003,
+    poster: "/uploads/the-matrix-reloaded.jpg",
+  },
+  {
+    title: "The Matrix Revolutions",
+    releaseYear: 2003,
+    poster: "/uploads/the-matrix-revolutions.jpg",
+  },
 ];
 
 async function seed() {

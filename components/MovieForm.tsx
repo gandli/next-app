@@ -3,15 +3,25 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { moviesSchema, MovieFormValues } from "@/db/schema";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addMovie } from "@/app/actions/movieActions";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { addMovie } from "@/app/actions/movieActions";
+import { uploadFile } from "@/app/actions/uploadsActions";
 
 // 电影表单组件
 const MovieForm = () => {
   const router = useRouter();
+  const [uploading, setUploading] = useState(false);
 
   // 使用 react-hook-form 创建表单
   const form = useForm<MovieFormValues>({
@@ -19,6 +29,7 @@ const MovieForm = () => {
     defaultValues: {
       title: "",
       releaseYear: undefined,
+      poster: "",
     },
   });
 
@@ -58,12 +69,35 @@ const MovieForm = () => {
             <FormItem>
               <FormLabel>发行年份</FormLabel>
               <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="输入发行年份" 
-                  {...field} 
-                  onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
-                  value={field.value ?? ''}
+                <Input
+                  type="number"
+                  placeholder="输入发行年份"
+                  {...field}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value ? Number(e.target.value) : undefined
+                    )
+                  }
+                  value={field.value ?? ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="poster"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>海报</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    field.onChange(e.target.files ? e.target.files[0] : null)
+                  }
                 />
               </FormControl>
               <FormMessage />
@@ -71,7 +105,9 @@ const MovieForm = () => {
           )}
         />
         {/* 提交按钮 */}
-        <Button type="submit">提交</Button>
+        <Button type="submit" disabled={uploading}>
+          {uploading ? "上传中..." : "提交"}
+        </Button>
       </form>
     </Form>
   );
