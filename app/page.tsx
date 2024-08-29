@@ -18,6 +18,7 @@ function MovieFormSkeleton() {
     <div className="space-y-8">
       <Skeleton className="h-10 w-full" />
       <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-32 w-full" /> 
       <Skeleton className="h-10 w-1/4" />
     </div>
   );
