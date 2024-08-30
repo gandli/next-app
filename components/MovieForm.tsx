@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { addMovie } from "@/app/actions/movieActions";
 import { useRouter } from "next/navigation";
 
-// 电影表单组件
+// 表单组件
 const MovieForm = () => {
   const router = useRouter();
 
@@ -46,15 +46,15 @@ const MovieForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* 电影标题输入字段 */}
+        {/* 标题输入字段 */}
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>电影标题</FormLabel>
+              <FormLabel>标题</FormLabel>
               <FormControl>
-                <Input placeholder="输入电影标题" {...field} />
+                <Input placeholder="输入标题" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
