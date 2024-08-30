@@ -1,10 +1,10 @@
 // app/page.tsx
-import VisitorForm from "@/components/VisitorForm";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <VisitorForm />
+      <Link href="/visitor/form">添加访客</Link>
     </div>
   );
 }

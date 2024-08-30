@@ -1,4 +1,4 @@
-// components/VisitorForm.tsx
+// app/visitor/form/VisitorForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -26,7 +26,7 @@ import { Separator } from "@/components/ui/separator";
 import { visitorsSchema, VisitorFormValues } from "@/db/schema";
 import { useRouter } from "next/navigation";
 
-export default function AddVisitorForm() {
+export default function VisitorForm() {
   const router = useRouter();
   const form = useForm<VisitorFormValues>({
     resolver: zodResolver(visitorsSchema),
