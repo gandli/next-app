@@ -4,7 +4,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -24,34 +23,20 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { visitorsSchema } from "@/db/schema";
+import { z } from "zod";
 
-const formSchema = z.object({
-  date: z.string(),
-  name: z.string().min(2, { message: "姓名至少需要2个字符" }),
-  gender: z.enum(["male", "female"]),
-  id: z.string().min(18, { message: "请输入有效的身份证号码" }),
-  contact: z.string().min(5, { message: "请输入有效的联系方式" }),
-  reason: z.string().min(2, { message: "请输入来访事由" }),
-  leave: z.string(),
-});
+// 定义表单数据的类型
+type VisitorFormData = z.infer<typeof visitorsSchema>;
 
 export default function AddVisitorForm() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      date: "",
-      name: "",
-      gender: "male",
-      id: "",
-      contact: "",
-      reason: "",
-      leave: "",
-    },
+  const form = useForm<VisitorFormData>({
+    resolver: zodResolver(visitorsSchema),
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function onSubmit(values: VisitorFormData) {
     setIsLoading(true);
     try {
       const response = await fetch("/api/visitor", {
@@ -83,7 +68,7 @@ export default function AddVisitorForm() {
         >
           <FormField
             control={form.control}
-            name="date"
+            name="dateTime"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>日期时间</FormLabel>
@@ -97,7 +82,7 @@ export default function AddVisitorForm() {
           <Separator className="col-span-2 my-4" />
           <FormField
             control={form.control}
-            name="name"
+            name="visitorName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>访客姓名</FormLabel>
@@ -138,7 +123,7 @@ export default function AddVisitorForm() {
           />
           <FormField
             control={form.control}
-            name="id"
+            name="idCardNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>身份证号码</FormLabel>
@@ -155,7 +140,7 @@ export default function AddVisitorForm() {
           />
           <FormField
             control={form.control}
-            name="contact"
+            name="contactInfo"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>联系方式</FormLabel>
@@ -173,7 +158,7 @@ export default function AddVisitorForm() {
           <Separator className="col-span-2 my-4" />
           <FormField
             control={form.control}
-            name="reason"
+            name="visitReason"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>来访事由</FormLabel>
@@ -187,7 +172,7 @@ export default function AddVisitorForm() {
           <Separator className="col-span-2 my-4" />
           <FormField
             control={form.control}
-            name="leave"
+            name="departureTime"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>离开时间</FormLabel>

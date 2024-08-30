@@ -35,7 +35,7 @@ export const visitors = sqliteTable("visitors", {
 export const visitorsSchema = z.object({
   dateTime: z.string().min(1, "请填写日期时间"),
   visitorName: z.string().min(1, "请填写访客姓名"),
-  gender: z.enum(["男性", "女性"]),
+  gender: z.enum(["male", "female"]),
   idCardNumber: z.string().regex(/^\d{15}|\d{18}$/, "身份证号码格式不正确"),
   contactInfo: z.string().min(1, "请填写联系方式"),
   visitReason: z.string().min(1, "请填写来访事由"),
