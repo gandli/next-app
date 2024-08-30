@@ -32,8 +32,6 @@ const MovieForm = () => {
 
   // 表单提交处理函数
   const onSubmit = async (data: MovieFormValues) => {
-    console.log("data", data);
-
     const result = await addMovie(data);
     if (result.success) {
       console.log(result.message);
@@ -46,7 +44,6 @@ const MovieForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* 标题输入字段 */}
         <FormField
           control={form.control}
           name="title"
@@ -60,7 +57,6 @@ const MovieForm = () => {
             </FormItem>
           )}
         />
-        {/* 发行年份输入字段 */}
         <FormField
           control={form.control}
           name="releaseYear"
@@ -84,7 +80,6 @@ const MovieForm = () => {
             </FormItem>
           )}
         />
-        {/* 提交按钮 */}
         <Button type="submit">提交</Button>
       </form>
     </Form>

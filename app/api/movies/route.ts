@@ -1,8 +1,7 @@
 // app/api/movies/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/db";
-import { movies } from "@/db/schema";
-import { moviesSchema } from "@/db/schema";
+import { movies,moviesSchema } from "@/db/schema";
 
 export async function POST(req: NextRequest) {
   try {
