@@ -1,5 +1,5 @@
 // app/page.tsx
-import { MovieForm } from "@/components/MovieForm";
+import  MovieForm from "@/components/MovieForm";
 
 export default function Home() {
   return (

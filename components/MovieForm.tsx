@@ -1,3 +1,4 @@
+// components/MovieForm.tsx
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -31,6 +32,8 @@ const MovieForm = () => {
 
   // 表单提交处理函数
   const onSubmit = async (data: MovieFormValues) => {
+    console.log("data", data);
+
     const result = await addMovie(data);
     if (result.success) {
       console.log(result.message);
