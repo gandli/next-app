@@ -27,4 +27,4 @@ export const visitorsSchema = z.object({
 });
 
 // 从验证架构中推断出访客登记表单值的类型
-export type VisitorFormValues = z.infer<typeof visitorsSchema>;
+export type VisitorFormValues = z.infer<typeof visitorsSchema> & { id: number };
