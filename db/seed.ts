@@ -1,20 +1,5 @@
 import { db } from "./db";
-import { movies, visitors } from "./schema";
-
-// 电影种子数据
-const movieSeedData = [
-  { title: "The Matrix", releaseYear: 1999, poster: "/uploads/the-matrix.jpg" },
-  {
-    title: "The Matrix Reloaded",
-    releaseYear: 2003,
-    poster: "/uploads/the-matrix-reloaded.jpg",
-  },
-  {
-    title: "The Matrix Revolutions",
-    releaseYear: 2003,
-    poster: "/uploads/the-matrix-revolutions.jpg",
-  },
-];
+import { visitors } from "./schema";
 
 // 访客种子数据
 const visitorSeedData = [
@@ -41,10 +26,6 @@ const visitorSeedData = [
 async function seed() {
   console.log("开始数据库种子填充...");
   try {
-    // 插入电影数据
-    await db.insert(movies).values(movieSeedData);
-    console.log("电影数据种子填充完成。");
-
     // 插入访客数据
     await db.insert(visitors).values(visitorSeedData);
     console.log("访客数据种子填充完成。");
