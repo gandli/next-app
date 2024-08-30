@@ -1,12 +1,4 @@
 // db\migrate.ts
-
-/**
- * 数据库迁移脚本
- *
- * 这个脚本用于执行数据库迁移，将定义的架构变更应用到 SQLite 数据库。
- * 它使用 drizzle-orm 来管理迁移过程。
- */
-
 import { migrate } from "drizzle-orm/bun-sqlite/migrator";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import { Database } from "bun:sqlite";

@@ -13,15 +13,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { addMovie } from "@/app/actions/movieActions";
-import { uploadFile } from "@/app/actions/uploadsActions";
+import { useRouter } from "next/navigation";
 
 // 电影表单组件
 const MovieForm = () => {
   const router = useRouter();
-  const [uploading, setUploading] = useState(false);
 
   // 使用 react-hook-form 创建表单
   const form = useForm<MovieFormValues>({
@@ -29,7 +26,6 @@ const MovieForm = () => {
     defaultValues: {
       title: "",
       releaseYear: undefined,
-      poster: "",
     },
   });
 
@@ -85,29 +81,8 @@ const MovieForm = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="poster"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>海报</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    field.onChange(e.target.files ? e.target.files[0] : null)
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         {/* 提交按钮 */}
-        <Button type="submit" disabled={uploading}>
-          {uploading ? "上传中..." : "提交"}
-        </Button>
+        <Button type="submit">提交</Button>
       </form>
     </Form>
   );

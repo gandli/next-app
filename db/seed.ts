@@ -1,5 +1,4 @@
 // db\seed.ts
-
 import { db } from "./db";
 import { movies } from "./schema";
 

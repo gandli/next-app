@@ -6,9 +6,9 @@ import { z } from "zod";
 // 定义数据库中的 movies 表
 export const movies = sqliteTable("movies", {
   id: integer("id").primaryKey({ autoIncrement: true }), // 自增的主键 ID
-  title: text("title").notNull(), // 电影标题
-  releaseYear: integer("release_year").notNull(), // 电影的发行年份
-  poster: text("poster").notNull(), // 电影海报路径
+  title: text("title").notNull(), // 标题
+  releaseYear: integer("release_year").notNull(), // 的发行年份
+  poster: text("poster").notNull(), // 海报路径
 });
 
 //定义与表结构对应的 Zod 验证架构
