@@ -1,7 +1,5 @@
 // app/visitor/table/page.tsx
-"use client";
 
-import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,48 +9,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { VisitorFormValues } from "@/db/schema"; // Assuming this type exists
+import { visitors } from "@/db/schema";
+import { db } from "@/db/db";
 
-export default function TablePage() {
-  const [visitors, setVisitors] = useState<VisitorFormValues[]>([]);
-
-  useEffect(() => {
-    async function fetchVisitors() {
-      try {
-        const response = await fetch("/api/visitor");
-        const data = await response.json();
-        if (response.ok) {
-          setVisitors(data.visitors);
-        } else {
-          console.error("Failed to fetch visitors:", data.error);
-        }
-      } catch (error) {
-        console.error("Error fetching visitors:", error);
-      }
-    }
-
-    fetchVisitors();
-  }, []);
+export default async function TablePage() {
+  // Fetching data directly on the server side
+  const allVisitors = await db.select().from(visitors).all();
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Visitor List</h1>
+      <h1 className="text-2xl font-bold mb-4">访客列表</h1>
       <Table>
-        <TableCaption>Visitor Data</TableCaption>
+        <TableCaption>访客数据</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Gender</TableHead>
-            <TableHead>ID Card Number</TableHead>
-            <TableHead>Contact Info</TableHead>
-            <TableHead>Visit Reason</TableHead>
-            <TableHead>Departure Time</TableHead>
+            <TableHead>日期</TableHead>
+            <TableHead>姓名</TableHead>
+            <TableHead>性别</TableHead>
+            <TableHead>身份证号码</TableHead>
+            <TableHead>联系方式</TableHead>
+            <TableHead>来访事由</TableHead>
+            <TableHead>离开时间</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {visitors.length > 0 ? (
-            visitors.map((visitor) => (
+          {allVisitors.length > 0 ? (
+            allVisitors.map((visitor) => (
               <TableRow key={visitor.id}>
                 <TableCell>{visitor.dateTime}</TableCell>
                 <TableCell>{visitor.visitorName}</TableCell>
@@ -65,7 +47,7 @@ export default function TablePage() {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={7} className="text-center">
+              <TableCell colSpan={10} className="text-center">
                 No visitors found.
               </TableCell>
             </TableRow>
