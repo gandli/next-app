@@ -13,7 +13,6 @@ import { visitors } from "@/db/schema";
 import { db } from "@/db/db";
 
 export default async function TablePage() {
-  // Fetching data directly on the server side
   const allVisitors = await db.select().from(visitors).all();
 
   return (
