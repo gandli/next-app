@@ -23,20 +23,18 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { visitorsSchema } from "@/db/schema";
-import { z } from "zod";
-
-// 定义表单数据的类型
-type VisitorFormData = z.infer<typeof visitorsSchema>;
+import { visitorsSchema, VisitorFormValues } from "@/db/schema";
+import { useRouter } from "next/navigation";
 
 export default function AddVisitorForm() {
-  const form = useForm<VisitorFormData>({
+  const router = useRouter();
+  const form = useForm<VisitorFormValues>({
     resolver: zodResolver(visitorsSchema),
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
-  async function onSubmit(values: VisitorFormData) {
+  async function onSubmit(values: VisitorFormValues) {
     setIsLoading(true);
     try {
       const response = await fetch("/api/visitor", {
@@ -47,6 +45,7 @@ export default function AddVisitorForm() {
       if (response.ok) {
         console.log("访客添加成功");
         // 可以在这里添加成功提示或重定向逻辑
+        router.push("/success");
       } else {
         console.error("添加访客失败");
         // 可以在这里添加错误提示
