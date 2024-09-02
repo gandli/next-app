@@ -67,13 +67,7 @@ export default function AnalyticsPage() {
         if (!acc[date]) {
           acc[date] = { date, 证件: 0, 案件: 0 };
         }
-
-        if (acc[date][reason] !== undefined) {
-          acc[date][reason]++;
-        } else {
-          acc[date][reason] = 1;
-        }
-
+        acc[date][reason] = (acc[date][reason] || 0) + 1; 
         return acc;
       }, {} as Record<string, ChartData>);
 
@@ -104,7 +98,7 @@ export default function AnalyticsPage() {
           <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
             <CardTitle>访客分析</CardTitle>
             <CardDescription>
-              显示最近 3 个月的访客总数
+              显示最近 全年 访客总数
             </CardDescription>
           </div>
           <div className="flex">
