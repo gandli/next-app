@@ -1,79 +1,175 @@
 // app/visitor/analytics/page.tsx
 "use client";
 
+import * as React from "react";
 import { VisitorFormValues } from "@/db/schema"; // 使用你定义的访客数据类型
 import { useEffect, useState, useMemo } from "react";
-import { Bar, BarChart, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import { ChartConfig, ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { Bar, BarChart, CartesianGrid, XAxis, Tooltip } from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 interface VisitorsResponse {
   visitors: VisitorFormValues[];
 }
 
+interface ChartData {
+  date: string;
+  [key: string]: number;
+}
+
 const chartConfig = {
-  count: {
-    label: "来访人数",
-    color: "#2563eb",
+  证件: {
+    label: "证件",
+    color: "hsl(var(--chart-1))",
+  },
+  案件: {
+    label: "案件",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
 export default function AnalyticsPage() {
-  const [visitorsData, setVisitorsData] = useState<VisitorsResponse | null>(null);
+  const [visitors, setVisitors] = useState<VisitorFormValues[]>([]);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
+  const [activeChart, setActiveChart] =
+    React.useState<keyof typeof chartConfig>("证件");
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchVisitors = async () => {
       try {
         const response = await fetch("/api/visitor");
-        if (!response.ok) {
-          throw new Error("Failed to fetch visitors data");
-        }
         const data: VisitorsResponse = await response.json();
-        setVisitorsData(data);
+        setVisitors(data.visitors);
       } catch (error) {
-        console.error("Error fetching visitors data:", error);
+        console.error("Error fetching visitors:", error);
       }
-    }
+    };
 
-    fetchData();
+    fetchVisitors();
   }, []);
 
-  const processedData = useMemo(() => {
-    if (!visitorsData || !visitorsData.visitors) return [];
+  useEffect(() => {
+    if (visitors.length > 0) {
+      const processedData = visitors.reduce((acc, visitor) => {
+        const date = new Date(visitor.dateTime).toLocaleDateString();
+        const reason = visitor.visitReason;
 
-    // 在这里对 visitorsData.visitors 进行处理或汇总
-    const dataByDate = visitorsData.visitors.reduce((acc, visitor) => {
-      const date = new Date(visitor.dateTime).toLocaleDateString();
-      if (!acc[date]) {
-        acc[date] = 0;
-      }
-      acc[date]++;
-      return acc;
-    }, {} as Record<string, number>);
+        if (!acc[date]) {
+          acc[date] = { date, 证件: 0, 案件: 0 };
+        }
 
-    return Object.entries(dataByDate).map(([date, count]) => ({
-      date,
-      count,
-    }));
-  }, [visitorsData]);
+        if (acc[date][reason] !== undefined) {
+          acc[date][reason]++;
+        } else {
+          acc[date][reason] = 1;
+        }
 
-  console.log(processedData);
+        return acc;
+      }, {} as Record<string, ChartData>);
+
+      setChartData(Object.values(processedData));
+    }
+  }, [visitors]);
+
+  const total = useMemo(() => {
+    return chartData.reduce(
+      (acc, data) => {
+        acc["证件"] += data["证件"];
+        acc["案件"] += data["案件"];
+        return acc;
+      },
+      { 证件: 0, 案件: 0 }
+    );
+  }, [chartData]);
 
   return (
     <div className="container mx-auto p-4">
-      <h1>Visitor Analytics</h1>
-      {processedData.length > 0 ? (
-        <ChartContainer config={chartConfig}>
-          <BarChart width={600} height={300} data={processedData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="count" fill={chartConfig.count.color} />
-          </BarChart>
-        </ChartContainer>
-      ) : (
-        <p>Loading...</p>
-      )}
+      <Card>
+        <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
+          <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+            <CardTitle>访客分析</CardTitle>
+            <CardDescription>
+            显示最近 3 个月的访客总数
+            </CardDescription>
+          </div>
+          <div className="flex">
+            {["证件", "案件"].map((key) => {
+              const chart = key as keyof typeof chartConfig;
+              return (
+                <button
+                  key={chart}
+                  data-active={activeChart === chart}
+                  className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
+                  onClick={() => setActiveChart(chart)}
+                >
+                  <span className="text-xs text-muted-foreground">
+                    {chartConfig[chart].label}
+                  </span>
+                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                    {total[key].toLocaleString()}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </CardHeader>
+        <CardContent className="px-2 sm:p-6">
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[250px] w-full"
+          >
+            <BarChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                left: 12,
+                right: 12,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  });
+                }}
+              />
+              <Tooltip
+                content={
+                  <ChartTooltipContent
+                    className="w-[150px]"
+                    nameKey="views"
+                    labelFormatter={(value) => {
+                      return new Date(value).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      });
+                    }}
+                  />
+                }
+              />
+              <Bar dataKey={activeChart} fill={chartConfig[activeChart].color} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
     </div>
   );
 }
