@@ -1,4 +1,3 @@
-// app/visitor/analytics/page.tsx
 "use client";
 
 import * as React from "react";
@@ -78,7 +77,12 @@ export default function AnalyticsPage() {
         return acc;
       }, {} as Record<string, ChartData>);
 
-      setChartData(Object.values(processedData));
+      // 按日期升序排序
+      const sortedData = Object.values(processedData).sort((a, b) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
+
+      setChartData(sortedData);
     }
   }, [visitors]);
 
@@ -100,7 +104,7 @@ export default function AnalyticsPage() {
           <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
             <CardTitle>访客分析</CardTitle>
             <CardDescription>
-            显示最近 3 个月的访客总数
+              显示最近 3 个月的访客总数
             </CardDescription>
           </div>
           <div className="flex">
@@ -144,7 +148,7 @@ export default function AnalyticsPage() {
                 minTickGap={32}
                 tickFormatter={(value) => {
                   const date = new Date(value);
-                  return date.toLocaleDateString("en-US", {
+                  return date.toLocaleDateString("zh-CN", {
                     month: "short",
                     day: "numeric",
                   });
@@ -156,7 +160,7 @@ export default function AnalyticsPage() {
                     className="w-[150px]"
                     nameKey="views"
                     labelFormatter={(value) => {
-                      return new Date(value).toLocaleDateString("en-US", {
+                      return new Date(value).toLocaleDateString("zh-CN", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
