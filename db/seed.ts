@@ -27,7 +27,7 @@ const visitorSeedData = [
     gender: "male",
     idCardNumber: "345678901234567890",
     contactInfo: "34567890123",
-    visitReason: "其他",
+    visitReason: "证件",
     departureTime: "2024-03-05T12:30:00",
   },
   {
@@ -54,7 +54,7 @@ const visitorSeedData = [
     gender: "male",
     idCardNumber: "678901234567890123",
     contactInfo: "67890123456",
-    visitReason: "其他",
+    visitReason: "证件",
     departureTime: "2024-06-20T15:45:00",
   },
   {
@@ -81,7 +81,7 @@ const visitorSeedData = [
     gender: "female",
     idCardNumber: "901234567890123456",
     contactInfo: "90123456789",
-    visitReason: "其他",
+    visitReason: "证件",
     departureTime: "2024-09-05T13:00:00",
   },
   {
